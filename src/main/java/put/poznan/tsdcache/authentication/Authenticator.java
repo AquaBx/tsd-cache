@@ -30,16 +30,16 @@ public class Authenticator {
     // TODO 1.1 - Finish this method using badLoginAttemptsStorage
     // TODO - TIP: Use email as a key
     private void increaseBadLoginAttemptsCounter(String email) {
-
+        badLoginAttemptsStorage.increment(email);
     }
 
     // TODO 1.1 - Finish this method using badLoginAttemptsStorage and badLoginAttemptsThreshold
     private boolean isLockedOut(String email) {
-        return false;
+        return badLoginAttemptsStorage.get(email) >= badLoginAttemptsThreshold;
     }
 
     // TODO 1.1 - Finish this method using badLoginAttemptsStorage
     private void resetCounter(String email) {
-
+        badLoginAttemptsStorage.remove(email);
     }
 }

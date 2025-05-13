@@ -14,19 +14,19 @@ public class RedisTaskQueue implements TaskQueue {
     // TODO 3.1 - Implement this method
     @Override
     public void push(String user, String task) {
-
+        redisOperations.leftPush(getKey(user), task);
     }
 
     // TODO 3.1 - Implement this method
     @Override
     public String pop(String user) {
-        return "";
+        return redisOperations.rightPop(getKey(user));
     }
 
     // TODO 3.1 - Implement this method
     @Override
     public void clear(String user) {
-
+        redisOperations.getOperations().delete(getKey(user));
     }
 
     // --- NOTICE ---
