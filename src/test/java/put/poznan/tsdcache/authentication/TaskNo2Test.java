@@ -29,6 +29,7 @@ class TaskNo2Test {
 
     @Test
     void shouldIncrementFromZero() {
+        storage.remove("user1");
         //when
         storage.increment("user1");
         //then

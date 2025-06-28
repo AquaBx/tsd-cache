@@ -6,7 +6,6 @@ import org.springframework.data.redis.core.ValueOperations;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-
 public class RedisBadLoginAttemptsStorage implements BadLoginAttemptsStorage {
 
     private final ValueOperations<String, Integer> redisOperations;
@@ -21,22 +20,29 @@ public class RedisBadLoginAttemptsStorage implements BadLoginAttemptsStorage {
     // TODO 2.1 - Finish this method. Use redisOperations
     @Override
     public Integer get(String key) {
-        return redisOperations.get(getKey(key));
+        Integer v = redisOperations.get(getKey(key));
+        if (v == null) {
+            return 0;
+        }
+        return v;
     }
 
     // TODO 2.1 - Finish this method. Use redisOperations
     // TODO - Remember that you need to set TTL
     @Override
     public void put(String key, Integer value) {
-        redisOperations.set(getKey(key),value, ttl, TimeUnit.SECONDS);
+        redisOperations.set(getKey(key), value, ttl, TimeUnit.SECONDS);
     }
 
     // TODO 2.1 - Finish this method. Use redisOperations
     // TODO - Remember that you need to set a new TTL
     @Override
     public void increment(String key) {
-        redisOperations.increment(getKey(key));
-        redisOperations.getAndExpire(getKey(key), ttl,TimeUnit.SECONDS);
+        Integer current = redisOperations.get(getKey(key));
+        if (current == null) {
+            current = 0;
+        }
+        redisOperations.set(getKey(key), current+1, ttl, TimeUnit.SECONDS);
     }
 
     // TODO 2.1 - Finish this method. Use redisOperations
